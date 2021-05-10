@@ -25,12 +25,12 @@ fi
 echo "$ADMIN_USER:$ADMIN_PASS"
 
 # create repo
-# echo "[ARTIFACTORY] creating repositories on Artifactory..."
-# curl \
-#      -XPATCH \
-#      -u $ADMIN_USER:$ADMIN_PASS \
-#      -H "Content-Type: application/yaml" -T artifactory_repo.yaml \
-# $JPD_URL/artifactory/api/system/configuration 
+echo "[ARTIFACTORY] creating repositories on Artifactory..."
+curl \
+     -XPATCH \
+     -u $ADMIN_USER:$ADMIN_PASS \
+     -H "Content-Type: application/yaml" -T artifactory_repo.yaml \
+$JPD_URL/artifactory/api/system/configuration 
 
 # curl \
 #      -u $ADMIN_USER:$ADMIN_PASS \
@@ -50,21 +50,21 @@ echo "$ADMIN_USER:$ADMIN_PASS"
 #     -d "{\"names\":[\"`echo $BUILD_NAMES | sed 's/,/","/g'`\"]}" \
 
 
-# create policy
-echo -e "\n[XRAY] creating policy  ... !"
-curl \
-     -XPOST \
-     -u $ADMIN_USER:$ADMIN_PASS \
-     -H "Content-Type: application/json" \
-     -d @xray_policy.json \
-$JPD_URL/xray/api/v2/policies
+# # create policy
+# echo -e "\n[XRAY] creating policy  ... !"
+# curl \
+#      -XPOST \
+#      -u $ADMIN_USER:$ADMIN_PASS \
+#      -H "Content-Type: application/json" \
+#      -d @xray_policy.json \
+# $JPD_URL/xray/api/v2/policies
 
 
-# create watch
-echo -e "\n[XRAY] creating watch  ... !"
-curl \
-     -XPOST \
-     -u $ADMIN_USER:$ADMIN_PASS \
-     -H "Content-Type: application/json" \
-     -d @xray_watch.json \
-$JPD_URL/xray/api/v2/watches
+# # create watch
+# echo -e "\n[XRAY] creating watch  ... !"
+# curl \
+#      -XPOST \
+#      -u $ADMIN_USER:$ADMIN_PASS \
+#      -H "Content-Type: application/json" \
+#      -d @xray_watch.json \
+# $JPD_URL/xray/api/v2/watches
