@@ -4,7 +4,7 @@ pipelines:
       environmentVariables:
         readOnly:
           virtualRepo: urs-mvn
-          
+
     steps:
       - name: build_backapp_mvn
         type: MvnBuild
@@ -23,7 +23,7 @@ pipelines:
           outputResources:
             - name: bi_backapp_mvn
           integrations:
-            - name: artifactory_us
+            - name: artifactory_eu
         execution:
     # export JFROG_CLI_BUILD_URL="${int_artifactory_eu_url/%artifactory/ui}/pipelines/myPipelines/${pipeline_name}/${run_number}/build_${pipeline_name}?branch=${res_src_code_backapp_mvn_branchName}"
           onStart:
