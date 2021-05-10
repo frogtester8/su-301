@@ -145,7 +145,6 @@ pipelines:
           inputResources:
             - name: bi_backapp_mvn_docker
           outputResources:
-            - name: pb_backapp_mvn_container
             - name: bi_backapp_mvn_docker_promoted
         execution:
           onSuccess:
