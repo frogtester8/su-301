@@ -3,7 +3,7 @@ resources:
     type: GitRepo
     configuration:
       gitProvider: my_github
-      path: cyan21/su-301
+      path: cyan21/su301
       branches:
         include: main
       # files:
