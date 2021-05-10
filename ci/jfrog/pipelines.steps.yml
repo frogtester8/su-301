@@ -98,7 +98,7 @@ pipelines:
             - >-
               cp
               ${res_fs_backapp_mvn_resourcePath}/multi-module-application-${runVarAppVersion}.jar
-              ${res_src_dockerfile_backapp_mvn_resourcePath}/complete/CI/Docker/multi-module-application.jar
+              ${res_src_dockerfile_backapp_mvn_resourcePath}/ci/docker/multi-module-application.jar
             - >-
               add_run_variables
               runVarGitCommit=${res_src_dockerfile_backapp_mvn_commitSha}
