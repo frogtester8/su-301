@@ -44,7 +44,7 @@ resources:
     configuration:
       sourceArtifactory: artifactory_eu
 #      pattern: '/**/multi-module-application-${runVarAppVersion}.jar'
-      aql: "items.find(\"repo\":\"urs-mvn\",\"name\": \"multi-module-application-${runVarAppVersion}.jar\")"
+      aql: "items.find({\"repo\":\"urs-mvn\",\"name\": \"multi-module-application-${runVarAppVersion}.jar\"})"
       flat: true
       
   - name: bi_backapp_mvn_docker
