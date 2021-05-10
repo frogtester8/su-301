@@ -61,5 +61,5 @@ pipelines:
             # - name: scan_backapp_mvn
             - name: build_backapp_mvn
           outputResources:
-            - name: pb_backapp_mvn
+            # - name: pb_backapp_mvn
             - name: bi_backapp_mvn_promoted_staging
