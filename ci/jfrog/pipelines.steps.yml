@@ -30,8 +30,7 @@ pipelines:
             - ls -l ${res_src_code_backapp_mvn_resourcePath}/src
             - >-        
               intName=${int_artifactory_eu_url%/artifactory}
-              sed "s/ART_ID/${intName}/g" ${res_src_code_backapp_mvn_resourcePath}/ci/jfrog/mvn-art-config.tpl \|
-              sed "s/VIRTUAL_REPO/${virtualRepo}/g" > ${res_src_code_backapp_mvn_resourcePath}/src/mvn-art-config
+              sed "s/ART_ID/${intName}/g" ${res_src_code_backapp_mvn_resourcePath}/ci/jfrog/mvn-art-config.tpl | sed "s/VIRTUAL_REPO/${virtualRepo}/g" > ${res_src_code_backapp_mvn_resourcePath}/src/mvn-art-config
               cat ${res_src_code_backapp_mvn_resourcePath}/src/mvn-art-config
           onFailure:
             - echo "Not cool"
