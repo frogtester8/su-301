@@ -15,7 +15,7 @@ pipelines:
           mvnCommand: clean package
           sourceLocation: complete/
           configFileLocation: CI
-          configFileName: mvn-art-config-yann
+          configFileName: mvn-art-config
           forceXrayScan: false
           autoPublishBuildInfo: true
           inputResources:
@@ -30,8 +30,7 @@ pipelines:
             - ls -l ${res_src_code_backapp_mvn_resourcePath}/src
             - jfrog rt c show
             # - >-        
-            - sed "s/ART_ID/artifactory_eu/g" ${res_src_code_backapp_mvn_resourcePath}/ci/jfrog/mvn-art-config.tpl | sed "s/VIRTUAL_REPO/${virtualRepo}/g"
-# > ${res_src_code_backapp_mvn_resourcePath}/src/mvn-art-config
+            - sed "s/ART_ID/artifactory_eu/g" ${res_src_code_backapp_mvn_resourcePath}/ci/jfrog/mvn-art-config.tpl | sed "s/VIRTUAL_REPO/${virtualRepo}/g" > ${res_src_code_backapp_mvn_resourcePath}/src/mvn-art-config
             - cat ${res_src_code_backapp_mvn_resourcePath}/src/mvn-art-config
           onFailure:
             - echo "Not cool"
