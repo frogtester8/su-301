@@ -1,4 +1,8 @@
 name: backapp_mvn
+  configuration:
+    environmentVariables:
+      readOnly:
+        virtualRepo: urs-mvn
 steps:
   - name: build_backapp_mvn
     type: MvnBuild
@@ -23,8 +27,9 @@ steps:
       onStart:
         - ls -l ${res_src_code_backapp_mvn_resourcePath}/src
         - >-        
-          sed "s/ART_ID/$ART_ID/g" ${res_src_code_backapp_mvn_resourcePath}/ci/jfrog/mvn-art-config.tpl \|
-          sed "s/VIRTUAL_REPO/$VIRTUAL_REPO/g" > ${res_src_code_backapp_mvn_resourcePath}/src/mvn-art-config
+          intName=${int_artifactory_eu_url%/artifactory}
+          sed "s/ART_ID/${intName}/g" ${res_src_code_backapp_mvn_resourcePath}/ci/jfrog/mvn-art-config.tpl \|
+          sed "s/VIRTUAL_REPO/${virtualRepo}/g" > ${res_src_code_backapp_mvn_resourcePath}/src/mvn-art-config
           cat ${res_src_code_backapp_mvn_resourcePath}/src/mvn-art-config
       onFailure:
         - echo "Not cool"
