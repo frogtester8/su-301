@@ -14,8 +14,10 @@ pipelines:
             JFROG_CLI_LOG_LEVEL: INFO
           mvnCommand: clean package
           sourceLocation: src
-          configFileLocation: src
-          configFileName: mvn-art-config
+          resolverSnapshotRepo: urs-mvn
+          resolverReleaseRepo: urs-mvn
+          deployerSnapshotRepo: urs-mvn
+          deployerReleaseRepo: urs-mvn
           forceXrayScan: false
           autoPublishBuildInfo: true
           inputResources:
@@ -29,9 +31,6 @@ pipelines:
           onStart:
             - ls -l ${res_src_code_backapp_mvn_resourcePath}/src
             - jfrog rt c show
-            # - >-        
-            - sed "s/ART_ID/artifactory_eu/g" ${res_src_code_backapp_mvn_resourcePath}/ci/jfrog/mvn-art-config.tpl | sed "s/VIRTUAL_REPO/${virtualRepo}/g" > ${res_src_code_backapp_mvn_resourcePath}/src/mvn-art-config
-            - cat ${res_src_code_backapp_mvn_resourcePath}/src/mvn-art-config
           onFailure:
             - echo "Not cool"
           onSuccess:
