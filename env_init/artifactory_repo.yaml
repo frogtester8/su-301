@@ -14,18 +14,24 @@ localRepositories:
     repoLayout: maven-2-default 
     xray:   
       enabled: true
-  # urs-docker-dev-local:
-  #   type: docker
-  #   dockerApiVersion: V2
-  #   repoLayout: simple-default 
-  #   xray:   
-  #     enabled: true
-  # urs-docker-rc-local:
-  #   type: docker
-  #   dockerApiVersion: V2
-  #   repoLayout: simple-default 
-  #   xray:   
-  #     enabled: true
+  urs-docker-dev-local:
+    type: docker
+    dockerApiVersion: V2
+    repoLayout: simple-default 
+    xray:   
+      enabled: true
+  urs-docker-rc-local:
+    type: docker
+    dockerApiVersion: V2
+    repoLayout: simple-default 
+    xray:   
+      enabled: true
+  urs-docker-release-local:
+    type: docker
+    dockerApiVersion: V2
+    repoLayout: simple-default 
+    xray:   
+      enabled: true
 remoteRepositories: 
   urs-jcenter-remote:
     type: maven
@@ -51,12 +57,13 @@ virtualRepositories:
       - urs-mvn-rc-local
       - urs-mvn-prod-local
     defaultDeploymentRepo: urs-mvn-dev-local
-  # urs-docker:
-  #   type: docker
-  #   dockerApiVersion: V2
-  #   repoLayout: simple-default 
-  #   repositories:   
-  #     - urs-docker-dev-local
-  #     - urs-docker-rc-local
-  #     - urs-dockerhub-remote
-  #   defaultDeploymentRepo: urs-docker-dev-local
+  urs-docker:
+    type: docker
+    dockerApiVersion: V2
+    repoLayout: simple-default 
+    repositories:   
+      - urs-docker-dev-local
+      - urs-docker-rc-local
+      - urs-docker-release-local
+      - urs-dockerhub-remote
+    defaultDeploymentRepo: urs-docker-dev-local

@@ -58,3 +58,96 @@ pipelines:
             - name: scan_backapp_mvn
           outputResources:
             - name: bi_backapp_mvn_promoted_staging
+
+  - name: backapp_mvn_docker
+    steps:
+      - name: backapp_mvn_docker
+        type: DockerBuild
+        configuration:
+          environmentVariables:
+            JFROG_CLI_BUILD_URL: "${int_artifactory_eu_url/%artifactory/ui}/pipelines/myPipelines/${pipeline_name}/${run_number}/build_${pipeline_name}?branch=${res_src_code_backapp_mvn_branchName}"
+            JFROG_CLI_LOG_LEVEL: INFO
+          affinityGroup: together
+          dockerFileName: Dockerfile
+          dockerFileLocation: ci/docker/
+          dockerImageName: swampup301.jfrog.io/urs-docker/backapp-mvn-docker
+          dockerImageTag: ${res_pb_backapp_mvn_appVersion}
+          # dockerOptions: >-
+          #   --build-arg
+          #   JFROG_CLI_BUILD_URL=${int_artifactory_eu_url/%artifactory/ui}/pipelines/myPipelines/${pipeline_name}/${run_number}/build_${pipeline_name}?branch=${res_src_dockerfile_backapp_mvn_branchName}
+          # inputSteps:
+          #   - name: setup_env
+          inputResources:
+            - name: pb_backapp_mvn
+            - name: src_dockerfile_backapp_mvn
+            - name: fs_backapp_mvn
+          integrations:
+            - name: artifactory_eu
+            - name: artifactory_docker
+        execution:
+          onStart:
+            - 'ls -la ${res_fs_backapp_mvn_resourcePath}'
+            - 'echo ${res_src_dockerfile_backapp_mvn_resourcePath}'
+            - 'ls -la  ${res_src_dockerfile_backapp_mvn_resourcePath}'
+            - >-
+              cp
+              ${res_fs_backapp_mvn_resourcePath}/multi-module-application-${runVarAppVersion}.jar
+              ${res_src_dockerfile_backapp_mvn_resourcePath}/complete/CI/Docker/multi-module-application.jar
+            - >-
+              add_run_variables
+              runVarGitCommit=${res_src_dockerfile_backapp_mvn_commitSha}
+            - >-
+              add_run_variables
+              runBranchName=${res_src_dockerfile_backapp_mvn_branchName}
+      - name: publish_backapp_mvn_docker
+        type: DockerPush
+        configuration:
+          environmentVariables:
+            JFROG_CLI_BUILD_URL: "${int_artifactory_eu_url/%artifactory/ui}/pipelines/myPipelines/bi_backapp_mvn_docker/${run_number}/setup_env?branch=${runBranchName}"
+            JFROG_CLI_LOG_LEVEL: INFO
+          affinityGroup: together
+          targetRepository: urs-docker-dev-local
+          autoPublishBuildInfo: true
+          inputSteps:
+            - name: backapp_mvn_docker
+          integrations:
+            - name: artifactory_eu
+          outputResources:
+            - name: bi_backapp_mvn_docker
+        execution:
+          # onStart:
+          #   - >-
+          #     export
+          #     JFROG_CLI_BUILD_URL="${int_artifactory_eu_url/%artifactory/ui}/pipelines/myPipelines/bi_backapp_mvn_docker/${run_number}/setup_env?branch=${runBranchName}"
+          onSuccess:
+            - >-
+              jfrog rt sp
+              --build=${res_bi_backapp_mvn_docker_buildName}/${run_number}
+              urs-docker-dev-local/backapp-mvn-docker/${runVarAppVersion}/
+              "app.version=${runVarAppVersion};app.commit.sha=${runVarAppCommitSHA};dockerfile.commit.sha=${runVarGitCommit};app.name=ninja"
+      - name: scan_backapp_mvn_docker
+        type: XrayScan
+        configuration:
+          failOnScan: false
+          inputResources:
+            - name: bi_backapp_mvn_docker
+              trigger: true
+      - name: bi_backapp_mvn_docker_promoted
+        type: PromoteBuild
+        configuration:
+          targetRepository: urs-docker-rc-local
+          includeDependencies: false
+          status: SCAN_OK
+          comment: Xray scan OK
+          copy: false
+          inputSteps:
+            - name: scan_backapp_mvn_docker
+          inputResources:
+            - name: bi_backapp_mvn_docker
+          outputResources:
+            - name: pb_backapp_mvn_container
+            - name: bi_backapp_mvn_docker_promoted
+        execution:
+          onSuccess:
+            - 'write_output pb_backapp_mvn_container newTag=${runVarAppVersion}'
+            - 'write_output pb_backapp_mvn_container mvnBINumber=${runVarBINumber}'
