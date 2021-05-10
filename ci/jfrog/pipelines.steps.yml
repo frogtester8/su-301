@@ -1,0 +1,58 @@
+name: backapp_mvn
+steps:
+  - name: build_backapp_mvn
+    type: MvnBuild
+    configuration:
+      environmentVariables:
+        JFROG_CLI_BUILD_URL: "${int_artifactory_eu_url/%artifactory/ui}/pipelines/myPipelines/${pipeline_name}/${run_number}/build_${pipeline_name}?branch=${res_src_code_backapp_mvn_branchName}"
+        JFROG_CLI_LOG_LEVEL: INFO
+      mvnCommand: clean package
+      sourceLocation: complete/
+      configFileLocation: CI
+      configFileName: mvn-art-config-yann
+      forceXrayScan: false
+      autoPublishBuildInfo: true
+      inputResources:
+        - name: src_code_backapp_mvn
+      outputResources:
+        - name: bi_backapp_mvn
+      integrations:
+        - name: artifactory_us
+    execution:
+# export JFROG_CLI_BUILD_URL="${int_artifactory_eu_url/%artifactory/ui}/pipelines/myPipelines/${pipeline_name}/${run_number}/build_${pipeline_name}?branch=${res_src_code_backapp_mvn_branchName}"
+      onStart:
+        - ls -l ${res_src_code_backapp_mvn_resourcePath}/src
+        - >-        
+          sed "s/ART_ID/$ART_ID/g" ${res_src_code_backapp_mvn_resourcePath}/ci/jfrog/mvn-art-config.tpl \|
+          sed "s/VIRTUAL_REPO/$VIRTUAL_REPO/g" > ${res_src_code_backapp_mvn_resourcePath}/src/mvn-art-config
+          cat ${res_src_code_backapp_mvn_resourcePath}/src/mvn-art-config
+      onFailure:
+        - echo "Not cool"
+      onSuccess:
+        - echo "Yahoo"
+
+  # - name: scan_backapp_mvn
+  #   type: XrayScan
+  #   configuration:
+  #     failOnScan: false
+  #     inputResources:
+  #       - name: bi_backapp_mvn
+  #         trigger: true
+
+  - name: bi_backapp_mvn_promoted_staging
+    type: PromoteBuild
+    configuration:
+      targetRepository: urs-mvn-rc-local
+      includeDependencies: false
+      status: SANDBOX_OK
+      comment: Unit testing and Xray scan passed succesfully
+      copy: false
+      inputResources:
+        - name: bi_backapp_mvn
+          trigger: true
+      inputSteps:
+        # - name: scan_backapp_mvn
+        - name: build_backapp_mvn
+      outputResources:
+        - name: pb_backapp_mvn
+        - name: bi_backapp_mvn_promoted_staging
