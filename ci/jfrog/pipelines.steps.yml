@@ -28,7 +28,7 @@ pipelines:
     # export JFROG_CLI_BUILD_URL="${int_artifactory_eu_url/%artifactory/ui}/pipelines/myPipelines/${pipeline_name}/${run_number}/build_${pipeline_name}?branch=${res_src_code_backapp_mvn_branchName}"
           onStart:
             - ls -l ${res_src_code_backapp_mvn_resourcePath}/src
-            - jfrog config show
+            - jfrog rt c show
             # - >-        
             - sed "s/ART_ID/artifactory_eu/g" ${res_src_code_backapp_mvn_resourcePath}/ci/jfrog/mvn-art-config.tpl | sed "s/VIRTUAL_REPO/${virtualRepo}/g"
 # > ${res_src_code_backapp_mvn_resourcePath}/src/mvn-art-config
