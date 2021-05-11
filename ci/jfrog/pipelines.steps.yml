@@ -87,7 +87,7 @@ pipelines:
           dockerFileName: Dockerfile
           dockerFileLocation: ci/docker/
           dockerImageName: swampup301.jfrog.io/urs-docker/backapp-mvn-docker
-          dockerImageTag: ${res_pb_backapp_mvn_appVersion}
+          dockerImageTag: ${runVarAppVersion}
           # dockerOptions: >-
           #   --build-arg
           #   JFROG_CLI_BUILD_URL=${int_artifactory_eu_url/%artifactory/ui}/pipelines/myPipelines/${pipeline_name}/${run_number}/build_${pipeline_name}?branch=${res_src_dockerfile_backapp_mvn_branchName}
