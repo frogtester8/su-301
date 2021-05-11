@@ -45,7 +45,7 @@ resources:
       sourceArtifactory: artifactory_eu
 #      pattern: "urs-mvn/**/multi-module-application-1.4.1.jar"
 #      pattern: "urs-mvn/**/${res_pb_backapp_mvn_appVersion}.jar"
-      aql: "items.find({\"repo\":\"urs-mvn\",\"name\": \"multi-module-application-1.4.1.jar\"})"
+      aql: 'items.find({"repo":"urs-mvn","name": "multi-module-application-1.4.1.jar"})'
 #      aql: "{\"items.find\": {\"repo\":\"urs-mvn\",\"name\": \"multi-module-application-${runVarAppVersion}.jar\"}}"
       flat: true
       
