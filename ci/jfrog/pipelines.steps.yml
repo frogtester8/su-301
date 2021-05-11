@@ -4,7 +4,6 @@ pipelines:
       environmentVariables:
         readOnly:
           virtualRepo: urs-mvn
-
     steps:
       - name: build_backapp_mvn
         type: MvnBuild
@@ -77,7 +76,7 @@ pipelines:
           onExecute:
             - add_run_variables runVarAppVersion=${res_pb_backapp_mvn_appVersion}
 
-      - name: backapp_mvn_docker
+      - name: build_backapp_mvn_docker
         type: DockerBuild
         configuration:
           environmentVariables:
@@ -88,9 +87,6 @@ pipelines:
           dockerFileLocation: ci/docker/
           dockerImageName: swampup301.jfrog.io/urs-docker/backapp-mvn-docker
           dockerImageTag: ${runVarAppVersion}
-          # dockerOptions: >-
-          #   --build-arg
-          #   JFROG_CLI_BUILD_URL=${int_artifactory_eu_url/%artifactory/ui}/pipelines/myPipelines/${pipeline_name}/${run_number}/build_${pipeline_name}?branch=${res_src_dockerfile_backapp_mvn_branchName}
           inputSteps:
             - name: export_variables
           inputResources:
@@ -108,6 +104,7 @@ pipelines:
               cp
               ${res_fs_backapp_mvn_resourcePath}/multi-module-application-${runVarAppVersion}.jar
               ${res_src_dockerfile_backapp_mvn_resourcePath}/ci/docker/multi-module-application.jar
+
       - name: publish_backapp_mvn_docker
         type: DockerPush
         configuration:
@@ -124,16 +121,13 @@ pipelines:
           outputResources:
             - name: bi_backapp_mvn_docker
         execution:
-          # onStart:
-          #   - >-
-          #     export
-          #     JFROG_CLI_BUILD_URL="${int_artifactory_eu_url/%artifactory/ui}/pipelines/myPipelines/bi_backapp_mvn_docker/${run_number}/setup_env?branch=${runBranchName}"
           onSuccess:
             - >-
               jfrog rt sp
               --build=${res_bi_backapp_mvn_docker_buildName}/${run_number}
               urs-docker-dev-local/backapp-mvn-docker/${runVarAppVersion}/
               "app.version=${runVarAppVersion};app.commit.sha=${runVarAppCommitSHA};dockerfile.commit.sha=${runVarGitCommit};app.name=ninja"
+
       - name: scan_backapp_mvn_docker
         type: XrayScan
         configuration:
@@ -141,7 +135,8 @@ pipelines:
           inputResources:
             - name: bi_backapp_mvn_docker
               trigger: true
-      - name: bi_backapp_mvn_docker_promoted
+
+      - name: promote_backapp_mvn_docker
         type: PromoteBuild
         configuration:
           targetRepository: urs-docker-rc-local
@@ -155,7 +150,3 @@ pipelines:
             - name: bi_backapp_mvn_docker
           outputResources:
             - name: bi_backapp_mvn_docker_promoted
-        execution:
-          onSuccess:
-            - 'write_output pb_backapp_mvn_container newTag=${runVarAppVersion}'
-            - 'write_output pb_backapp_mvn_container mvnBINumber=${runVarBINumber}'
