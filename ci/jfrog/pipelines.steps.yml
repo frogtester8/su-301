@@ -106,7 +106,7 @@ pipelines:
             - 'ls -la  ${res_src_dockerfile_backapp_mvn_resourcePath}'
             - >-
               cp
-              ${res_fs_backapp_mvn_resourcePath}/multi-module-application-${res_pb_backapp_mvn_appVersion}.jar
+              ${res_fs_backapp_mvn_resourcePath}/multi-module-application-${runVarAppVersion}.jar
               ${res_src_dockerfile_backapp_mvn_resourcePath}/ci/docker/multi-module-application.jar
       - name: publish_backapp_mvn_docker
         type: DockerPush
