@@ -46,7 +46,7 @@ resources:
 #      pattern: "urs-mvn/**/multi-module-application-1.4.1.jar"
 #      pattern: "urs-mvn/**/${res_pb_backapp_mvn_appVersion}.jar"
       # aql: 'items.find({"repo":"urs-mvn","name": "multi-module-application-1.4.1.jar"})'
-      aql: '"items.find": {"repo":"urs-mvn","name": "multi-module-application-1.4.1.jar"}"
+      aql: '"items.find": {"repo":"urs-mvn","name": "multi-module-application-1.4.1.jar"}"'
       flat: true
       
   - name: bi_backapp_mvn_docker
