@@ -1,0 +1,17 @@
+pipelines:
+  - name: vm_deployment
+
+    steps:
+      - name: deploy_to_vm
+        type: Bash
+        configuration:
+          inputResources:
+            - name: vm_group
+            - name: wh_jenkins
+        execution:
+          onStart:
+            - echo onStart
+            - echo "$res_update_prop_payload" | jq '.' > payload.json
+            - cat payload.json
+          onExecute:
+            - ssh -i ~/.ssh/access_minion yannc@${res_access_minion_targets_0} "uname -a"
