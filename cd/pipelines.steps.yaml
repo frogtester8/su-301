@@ -11,7 +11,7 @@ pipelines:
         execution:
           onStart:
             - echo onStart
-            - echo "$res_update_prop_payload" | jq '.' > payload.json
+            - echo "$res_wh_jenkins_payload" | jq '.' > payload.json
             - cat payload.json
           onExecute:
-            - ssh -i ~/.ssh/access_minion yannc@${res_access_minion_targets_0} "uname -a"
+            - ssh ec2-user@${res_access_bastion_targets_0} "uname -a &&./test.sh"
