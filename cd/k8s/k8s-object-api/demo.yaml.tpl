@@ -11,15 +11,6 @@ metadata:
   name: MY_SVC_ACCOUNT
   namespace: MY_NAMESPACE
 
-#---
-#apiVersion: v1
-#kind: Secret
-#metadata:
-#  name: ironman-secret
-#  annotations:
-#    kubernetes.io/service-account.name: ironman
-#type: kubernetes.io/service-account-token
-
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
