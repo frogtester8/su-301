@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: su301.jfrog.io/urs-docker/backapp-mvn-docker
+  repository: swampup301.jfrog.io/urs-docker/backapp-mvn-docker
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "1.4.1"
