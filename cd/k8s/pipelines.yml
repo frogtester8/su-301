@@ -38,7 +38,7 @@ resources:
       buildName: {{ .Values.K8sResources.buildInfo.name }}
       buildNumber: ${run_number} 
 
-  - name: {{ .Values.K8sResources.chart.resourceName }}
+  - name: {{ .Values.K8sResources.chart.name }}
     type: HelmChart
     configuration:
       sourceArtifactory: {{ .Values.K8s.integration.artifactory }}
