@@ -1,5 +1,8 @@
 FROM swampup301.jfrog.io/urs-docker/groovy:jre16
 
-COPY multi-module-application.jar multi-module-application.jar
+RUN mkdir -p /opt/webapp/
+COPY multi-module-application.jar /opt/webapp/multi-module-application.jar
 
-CMD /bin/bash -c echo "hello world"
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "/opt/webapp/multi-module-application.jar"]
