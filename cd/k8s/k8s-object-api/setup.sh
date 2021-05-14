@@ -15,10 +15,6 @@ sed -i '' "s/MY_SVC_ACCOUNT/$sa/g" demo.yaml
 
 sudo kubectl apply -f demo.yaml 
 
-sudo kubectl create secret docker-registry $frontend_registry_name \
-    --docker-server=$frontend_registry_url \
-    --docker-username=$frontend_registry_user --docker-password=$frontend_registry_pass --docker-email=$email -n $ns
-
 sudo kubectl create secret docker-registry $backend_registry_name \
     --docker-server=$backend_registry_url \
     --docker-username=$backend_registry_user --docker-password=$backend_registry_pass --docker-email=$email -n $ns
@@ -26,11 +22,19 @@ sudo kubectl create secret docker-registry $backend_registry_name \
 
 # generate kubeconfig (for JFrog Pipelines)
 ####################
+path="."
+which yq >/dev/null
 
-# install yq
-curl -LO https://github.com/mikefarah/yq/releases/download/v4.4.0/yq_linux_amd64
-chmod u+x yq_linux_amd64 && sudo mv yq_linux_amd64 yq 
-./yq --version
+if [ $? -ne 0 ]; then
+    echo "[INFO] installing yq in the current path"
+    curl -LO https://github.com/mikefarah/yq/releases/download/v4.4.0/yq_linux_amd64
+    chmod u+x yq_linux_amd64 && sudo mv yq_linux_amd64 yq 
+    $path/yq --version
+else 
+    echo "[INFO] yq already installed"
+    yq_path=`which yq`
+    path=${yq_path%/*}
+fi
 
 # get kubeconfig  
 kubectl config view --flatten --minify > myKubeConfig
@@ -39,7 +43,7 @@ kubectl config view --flatten --minify > myKubeConfig
 token=`sudo kubectl describe secrets $sa -n $ns | grep "^token" | tr -d "[[:space:]]" | cut -d: -f2`
 
 # add authentication by token 
-yq -i e ".users[0].user.token = \"$token\"" myKubeConfig 
+$path/yq -i e ".users[0].user.token = \"$token\"" myKubeConfig 
 
 # remove authentication via gcp 
-yq -i e "del(.users[0].user.auth-provider)" myKubeConfig
+$path/yq -i e "del(.users[0].user.auth-provider)" myKubeConfig
