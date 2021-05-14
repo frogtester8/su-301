@@ -18,7 +18,7 @@ K8sResources:
     branches:
       include: lab3_ok
     files:
-      include: ^java\/cd\/k8s/.*\.yml
+      include: cd\/k8s/.*\.yml
   chart:
     name: lab3_hc
   buildInfo:
