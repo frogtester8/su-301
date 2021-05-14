@@ -14,138 +14,154 @@ pipeline {
                 command:
                 - cat
                 tty: true
-              - name: busybox
-                image: busybox
+              - name: docker
+                image: docker:latest
                 command:
                 - cat
                 tty: true
+                volumeMounts:
+                - name: docker-sock
+                  mountPath: /var/run/docker.sock
+              volumes:
+                - name: docker-sock
+                  hostPath:
+                    path: /var/run/docker.sock
             """.stripIndent()
         }
     }
-/*    
-    stages {
-        stage('Run maven') {
-            steps {
-                container('maven') {
-                    sh 'mvn -version'
-                }
-            }
-        }
-    }
-*/
+
     environment {
-        ARTY_CREDS=credentials('jenkins_rt')
-//        ADM_CREDS=credentials('admin_art')
+        ARTY_CREDS=credentials('jenkins')
         ART_ID="artifactory-eu"
         JAVA_HOME = '/usr/lib/jvm/java-1.8-openjdk/'
         MAVEN_HOME = '/usr/share/maven'
     }
 
     parameters {
-        string(name: 'JPD_URL', defaultValue: 'http://artifactory-eu-yannc4-0.soleng-emea-staging.jfrog.team', description: '')
-        string(name: 'PROMOTE_REPO', defaultValue: 'ninja-mvn-rc-local', description: '')
-        booleanParam(name: 'FAIL_BUILD', defaultValue: false, description: 'Xray scan')
+        string(name: 'JPD_URL', defaultValue: 'swampup301.jfrog.io', description: '')
+        string(name: 'MVN_REPO', defaultValue: 'urs-mvn', description: '')
+        string(name: 'DOCKER_REPO', defaultValue: 'urs-docker', description: '')
+        string(name: 'WEBHOOK_PASS', defaultValue: 'Chaysinh!21', description: '')
+        string(name: 'WEBHOOK_URL', defaultValue: 'https://swampup301-pipelines-api.jfrog.io/v1/projectIntegrations/32/hook', description: '')
+//        booleanParam(name: 'FAIL_BUILD', defaultValue: false, description: 'Xray scan')
     }
     
     stages {
 
-        stage ('Get Source code') {
-            steps {
-                git branch: 'demo2', url: "https://github.com/cyan21/gs-multi-module.git"
-            
-                sh "ls -l && mv complete/pom.xml.test complete/pom.xml && cat complete/pom.xml"
-                sh "mv complete/application/pom.xml.test complete/application/pom.xml && cat complete/application/pom.xml"
-                sh "mv complete/library/pom.xml.test complete/library/pom.xml && cat complete/library/pom.xml"
-
-                sh '''
-                   echo "{\\"names\\":[\\"${JOB_NAME}\\"]}" > payload.json && cat payload.json
-                '''   
-            }
-        }
-  
-        stage ('Artifactory configuration') {
+        stage ('Maven Build') {
             steps {
                 container('maven') {
 
+                    git branch: 'demo2', url: "https://github.com/cyan21/gs-multi-module.git"
+
                     rtServer (
                         id: env.ART_ID,
-                        url: "${params.JPD_URL}/artifactory",
-                        credentialsId: 'jenkins_rt'
+                        url: "https://${params.JPD_URL}/artifactory",
+                        credentialsId: 'jenkins'
                     )
     
                     rtMavenDeployer (
                         id: "MAVEN_DEPLOYER",
                         serverId: env.ART_ID,
-                        releaseRepo: "ninja-mvn",
-                        snapshotRepo: "ninja-mvn"
+                        releaseRepo: "urs-mvn",
+                        snapshotRepo: "urs-mvn"
                     )
     
                     rtMavenResolver (
                         id: "MAVEN_RESOLVER",
                         serverId: env.ART_ID,
-                        releaseRepo: "ninja-mvn",
-                        snapshotRepo: "ninja-mvn"
+                        releaseRepo: "urs-mvn",
+                        snapshotRepo: "urs-mvn"
                     )
                     
                     rtBuildInfo (
                         captureEnv: true,
                         excludeEnvPatterns: ['*private*', 'internal-*', 'ADM*'],
      
-                        // buildName: 'my-build',
+                        buildName: 'jenkins-maven',
                         // buildNumber: '20'
                     )
                                         
-                    // Xray : reference  build info
-                    // sh "curl -XPOST -u${ADM_CREDS_USR}:${ADM_CREDS_PSW}  -H \"Content-Type: application/json\" -d @payload.json ${JPD_URL}/xray/api/v1/binMgr/builds"
-                }
-            }
-        }
-
-        stage ('Build Maven project') {
-            steps {
-                container('maven') {
                     rtMavenRun (
                         pom: 'complete/pom.xml',
                         goals: 'clean package',
                         deployerId: "MAVEN_DEPLOYER",
                         resolverId: "MAVEN_RESOLVER"
                     )
+                    
+                    rtPublishBuildInfo (
+                        serverId: env.ART_ID
+                    )
                 }
             }
         }
 
-        stage ('Publish build info') {
+        stage ('Docker Build & Push') {
             steps {
-                rtPublishBuildInfo (
-                    serverId: env.ART_ID
-                )
-            }
-        }
+                container('docker') {
 
-        stage ('Xray scan') {
-            steps {
-                xrayScan (
-                    serverId: env.ART_ID,
-                    failBuild: params.FAIL_BUILD
-                )
-            }
-        }
-      
-        stage ('Promotion') {
-            steps {
-                rtPromote (
-                    //Mandatory parameter
-                    serverId: env.ART_ID,
-                    targetRepo: params.PROMOTE_REPO,
+                    rtServer (
+                        id: env.ART_ID,
+                        url: "https://${params.JPD_URL}/artifactory",
+                        credentialsId: 'jenkins'
+                    )
 
-                    //Optional parameters
-                    comment: 'passed Xray scan',
-                    status: 'XRAY_OK',
-                    includeDependencies: false,
-                    failFast: true,
-                    copy: false
-                )
-            }
-        }
+                    rtBuildInfo (
+                        captureEnv: true,
+                        excludeEnvPatterns: ['*private*', 'internal-*', 'ADM*'],
+                        buildName: 'jenkins-maven',
+                        buildNumber: env.BUILD_NUMBER
+                    )
+                    
+                    rtDownload (
+                        serverId: env.ART_ID,
+                        spec: '''{
+                              "files": [
+                                {
+                                  "pattern": "${MVN_REPO}/com/example/multi-module-application/1.4.1/multi-module-application-1.4.1.jar",
+                                  "target": "multi-module-application.jar"
+                                }
+                              ]
+                        }''',
+                        module: 'webapp',
+                        buildName: 'jenkins-docker',
+                        buildNumber: env.BUILD_NUMBER
+                    )
+                    
+                    sh '''
+                        # Java is required by the Artifactory Jenkins plugin
+                        apk add curl openjdk11
+                        curl -O https://raw.githubusercontent.com/cyan21/gs-multi-module/soleng-stg/complete/CI/Docker/Dockerfile
+                        docker build -t ${JPD_URL}/${DOCKER_REPO}/jenkins-javapp:1.0.0 .
+                        docker images
+                    '''
+                
+                    rtDockerPush(
+                        serverId: env.ART_ID,
+                        image: "${params.JPD_URL}/${params.DOCKER_REPO}/jenkins-javapp:1.0.0",
+                        targetRepo: 'urs-docker-dev-local',
+                        properties: 'project-name=docker1;status=stable',
+                        // If the build name and build number are not set here, the current job name and number will be used:
+                        buildName: 'jenkins-docker',
+                        buildNumber: env.BUILD_NUMBER
+                    )
+ 
+                    rtPublishBuildInfo (
+                        serverId: env.ART_ID,
+                        buildName: 'jenkins-docker',
+                        buildNumber: env.BUILD_NUMBER
+                    )
+                }
+            } // end steps
+        } // end stage
+            
+        stage('Call to JFrog Pipelines for deployment') {
+            steps {
+                sh '''
+                    curl -XPOST -H "authorization: ${WEBHOOK_PASS}" -d "{ \"jenkins_job_name\" : \"$JOB_NAME\", \"run_number\": \"$BUILD_NUMBER\" }" ${WEBHOOK_URL}                  
+                 '''
+            } // end steps
+        } // end stage 
+        
     }
 }
