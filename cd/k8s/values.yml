@@ -30,7 +30,7 @@ K8sResources:
 K8sSteps:
   publishHelm:
     name: lab3_publish_helm_chart
-    path: java/cd/k8s/helm_chart/
+    path: cd/k8s/helm_chart/
     lint: true
     autoPublishBuildInfo: true
   deployHelm:
