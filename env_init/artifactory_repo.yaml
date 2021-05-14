@@ -32,6 +32,16 @@ localRepositories:
     repoLayout: simple-default 
     xray:   
       enabled: true
+  urs-helm-dev-local:
+    type: helm
+    repoLayout: simple-default 
+    xray:   
+      enabled: false
+  urs-helm-release-local:
+    type: helm
+    repoLayout: simple-default 
+    xray:   
+      enabled: false
 remoteRepositories: 
   urs-jcenter-remote:
     type: maven
@@ -67,3 +77,10 @@ virtualRepositories:
       - urs-docker-release-local
       - urs-dockerhub-remote
     defaultDeploymentRepo: urs-docker-dev-local
+  urs-helm:
+    type: helm
+    repoLayout: simple-default 
+    repositories:   
+      - urs-helm-dev-local
+      - urs-helm-release-local
+    defaultDeploymentRepo: urs-helm-dev-local
