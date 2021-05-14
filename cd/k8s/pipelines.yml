@@ -52,6 +52,8 @@ pipelines:
       - name: {{ .Values.K8sSteps.publishHelm.name }}
         type: HelmPublish
         configuration:
+          environmentVariables:
+            JFROG_CLI_BUILD_URL: "${int_{{ .Values.K8s.integration.artifactory }}_url/%artifactory/ui}/pipelines/myPipelines/${pipeline_name}/${run_number}/build_${pipeline_name}?branch=${res_{{ .Values.K8sResources.gitRepoHelm.name }}_branchName}"
           helmVersion: 3
           chartPath: {{ .Values.K8sSteps.publishHelm.path }}
           lint: {{ .Values.K8sSteps.publishHelm.lint }}

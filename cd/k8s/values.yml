@@ -3,7 +3,7 @@ K8s:
   chart: 
     repo: urs-helm
     repoPromotion1: urs-helm-release-local
-    name: myapp
+    name: webapp
     version: 0.1.0
   integration:
     artifactory: artifactory_eu
