@@ -30,7 +30,14 @@ resources:
       sourceArtifactory: {{ .Values.K8s.integration.artifactory }}
       buildName: {{ .Values.K8sResources.buildInfo.name }}
       buildNumber: ${run_number} 
-  
+
+  - name: {{ .Values.K8sResources.buildInfoPromoted.resourceName }}
+    type: BuildInfo 
+    configuration:
+      sourceArtifactory: {{ .Values.K8s.integration.artifactory }}
+      buildName: {{ .Values.K8sResources.buildInfo.name }}
+      buildNumber: ${run_number} 
+
   - name: {{ .Values.K8sResources.chart.resourceName }}
     type: HelmChart
     configuration:
@@ -101,4 +108,4 @@ pipelines:
           inputSteps:
             - name: {{ .Values.K8sSteps.testApp.name }}
           outputResources:
-            - name: {{ .Values.K8sResources.buildInfo.resourceName }}
+            - name: {{ .Values.K8sResources.buildInfoPromoted.resourceName }}
