@@ -1,0 +1,50 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: build-plane
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: yann-tooling
+  namespace: build-plane
+
+#---
+#apiVersion: v1
+#kind: Secret
+#metadata:
+#  name: ironman-secret
+#  annotations:
+#    kubernetes.io/service-account.name: ironman
+#type: kubernetes.io/service-account-token
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: sub-admin
+  namespace: build-plane
+rules:
+- apiGroups: [""] # "" indicates the core API group
+  resources: ["pods","services","daemonsets","deployments","replicasets","statefulsets","jobs","configmaps","secrets","ingress"]
+  verbs: ["get","list","create","update","patch", "watch","delete","deletecollection"]
+- apiGroups: ["apps"]
+  resources: ["pods","services","daemonsets","deployments","replicasets","statefulsets","jobs","configmaps","secrets","ingress"]
+  verbs: ["*"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: sub-admin-rb
+  namespace: build-plane
+subjects:
+- kind: Group
+  name: system:serviceaccounts:build-plane
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: sub-admin
+  apiGroup: rbac.authorization.k8s.io
