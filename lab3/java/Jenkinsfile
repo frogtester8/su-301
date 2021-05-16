@@ -131,8 +131,8 @@ pipeline {
                     sh '''
                         apk add curl openjdk11
                         curl -O https://raw.githubusercontent.com/cyan21/su301/main/lab2/java/Dockerfile
+                        docker login -u ${ARTY_CREDS_USR} -p ${ARTY_CREDS_PSW} ${JPD_URL}
                         docker build -t ${JPD_URL}/${DOCKER_REPO}/jenkins-javapp:1.0.0 .
-                        docker images
                     '''
                 
                     rtDockerPush(

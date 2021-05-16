@@ -79,6 +79,7 @@ pipelines:
             - values.yaml
         execution:
           onStart:
+            - echo "$res_{{ .Values.K8sResources.incomingWebhook.resourceName }}_payload" | jq "."
             - varRunImageName=`echo "$res_{{ .Values.K8sResources.incomingWebhook.resourceName }}_payload" | jq '.image_name'`
             - varRunImageTag=`echo "$res_{{ .Values.K8sResources.incomingWebhook.resourceName }}_payload" | jq '.image_tag'`
             - echo $varRunImageName
