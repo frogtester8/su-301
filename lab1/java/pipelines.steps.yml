@@ -56,5 +56,4 @@ pipelines:
           inputSteps:
             - name: lab1_scan_backapp_mvn
           outputResources:
-            - name: lab1_bi_backapp_mvn_promoted_staging
-            - name: lab1_pb_backapp_mvn
+            - name: lab1_bi_backapp_mvn_promoted
