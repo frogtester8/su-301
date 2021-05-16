@@ -7,8 +7,7 @@ resources:
       branches:
         include: main
       files:
-      #   include: ^complete\/.+
-        include: lab1\/java\/.+
+        include: lab1/java/.+
 
   - name: lab1_bi_backapp_mvn
     type: BuildInfo
