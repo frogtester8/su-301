@@ -74,9 +74,15 @@ pipelines:
             - name: {{ .Values.K8sResources.chart.name }}
             - name: {{ .Values.K8sResources.incomingWebhook.resourceName }}
           releaseName: my-web-app
-          flags: "--debug --install --namespace {{ .Values.K8s.namespace }} --cleanup-on-fail "
+          flags: "--debug --install --namespace {{ .Values.K8s.namespace }} --cleanup-on-fail --image.repository:${varRunImageName} --image.tag=${varRunImageTag} "
           valueFilePaths:
             - values.yaml
+        execution:
+          onStart:
+            - varRunImageName=`echo "$res_{{ .Values.K8sResources.incomingWebhook.resourceName }}_payload" | jq '.image_name'`
+            - varRunImageTag=`echo "$res_{{ .Values.K8sResources.incomingWebhook.resourceName }}_payload" | jq '.image_tag'`
+            - echo $varRunImageName
+            - echo $varRunImageTag
 
       - name: {{ .Values.K8sSteps.testApp.name }}
         type: Bash

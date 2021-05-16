@@ -42,17 +42,17 @@ pipeline {
         string(name: 'MVN_REPO', defaultValue: 'urs-mvn', description: '')
         string(name: 'DOCKER_REPO', defaultValue: 'urs-docker', description: '')
         string(name: 'WEBHOOK_PASS', defaultValue: 'Chaysinh!21', description: '')
-        string(name: 'WEBHOOK_URL', defaultValue: 'https://swampup301-pipelines-api.jfrog.io/v1/projectIntegrations/32/hook', description: '')
-//        booleanParam(name: 'FAIL_BUILD', defaultValue: false, description: 'Xray scan')
+        string(name: 'WEBHOOK_URL', defaultValue: 'https://swampup301-pipelines-api.jfrog.io/v1/projectIntegrations/57/hook', description: '')
+        booleanParam(name: 'FAIL_BUILD', defaultValue: false, description: 'Xray scan')
     }
     
     stages {
-
+/*
         stage ('Maven Build') {
             steps {
                 container('maven') {
 
-                    git branch: 'demo2', url: "https://github.com/cyan21/gs-multi-module.git"
+                    git branch: 'main', url: "https://github.com/cyan21/su301.git"
 
                     rtServer (
                         id: env.ART_ID,
@@ -95,7 +95,7 @@ pipeline {
                 }
             }
         }
-
+*/
         stage ('Docker Build & Push') {
             steps {
                 container('docker') {
@@ -129,9 +129,8 @@ pipeline {
                     )
                     
                     sh '''
-                        # Java is required by the Artifactory Jenkins plugin
                         apk add curl openjdk11
-                        curl -O https://raw.githubusercontent.com/cyan21/gs-multi-module/soleng-stg/complete/CI/Docker/Dockerfile
+                        curl -O https://raw.githubusercontent.com/cyan21/su301/main/lab2/java/Dockerfile
                         docker build -t ${JPD_URL}/${DOCKER_REPO}/jenkins-javapp:1.0.0 .
                         docker images
                     '''
@@ -155,10 +154,10 @@ pipeline {
             } // end steps
         } // end stage
             
-        stage('Call to JFrog Pipelines for deployment') {
+        stage('Call to JFrog Pipelines') {
             steps {
                 sh '''
-                    curl -XPOST -H "authorization: ${WEBHOOK_PASS}" -d "{ \"jenkins_job_name\" : \"$JOB_NAME\", \"run_number\": \"$BUILD_NUMBER\" }" ${WEBHOOK_URL}                  
+                    curl -XPOST -H "authorization: ${WEBHOOK_PASS}" -d "{ \"jenkins_job_name\" : \"$JOB_NAME\", \"run_number\": \"$BUILD_NUMBER\", \"image_name\":\"jenkins-javapp\", \"image_tag\":\"1.0.0\"}" ${WEBHOOK_URL}                  
                  '''
             } // end steps
         } // end stage 
