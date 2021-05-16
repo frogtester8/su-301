@@ -54,7 +54,6 @@ pipelines:
           autoPublishBuildInfo: {{ .Values.K8sSteps.publishHelm.autoPublishBuildInfo }}
           inputResources:
             - name: {{ .Values.K8sResources.gitRepoHelm.name }}
-            - name: {{ .Values.K8sResources.incomingWebhook.resourceName }}
           integrations:
             - name: {{ .Values.K8s.integration.artifactory }}
           outputResources:
@@ -73,6 +72,7 @@ pipelines:
             - name: {{ .Values.K8s.integration.k8s }}
           inputResources:
             - name: {{ .Values.K8sResources.chart.name }}
+            - name: {{ .Values.K8sResources.incomingWebhook.resourceName }}
           releaseName: my-web-app
           flags: "--debug --install --namespace {{ .Values.K8s.namespace }} --cleanup-on-fail "
           valueFilePaths:
