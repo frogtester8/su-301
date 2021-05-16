@@ -3,7 +3,7 @@ K8s:
   pipelineName: lab3_k8s_deployment
   chart: 
     repo: urs-helm
-    repoPromotion1: urs-helm-release-local
+    # repoPromotion1: urs-helm-release-local
     name: webapp
     version: 0.1.0
   integration:
@@ -25,8 +25,8 @@ K8sResources:
   buildInfo:
     resourceName: lab3_bi_chart
     name: k8s_helm_chart
-  buildInfoPromoted:
-    resourceName: lab3_bi_chart_promoted
+  # buildInfoPromoted:
+  #   resourceName: lab3_bi_chart_promoted
   incomingWebhook:
     resourceName: lab3_incoming_webhook
     integrationName: trigger_chart_deployment
@@ -41,12 +41,12 @@ K8sSteps:
     name: lab3_deploy_helm_chart
   testApp:
     name: lab3_test_app
-  promoteHelm:
-    name: lab3_promote_helm_chart
-    includeDependencies: false
-    status: TEST_OK
-    comment: passed non regression test
-    copy: false
+  # promoteHelm:
+  #   name: lab3_promote_helm_chart
+  #   includeDependencies: false
+  #   status: TEST_OK
+  #   comment: passed non regression test
+  #   copy: false
 
 
 

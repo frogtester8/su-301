@@ -93,18 +93,18 @@ pipelines:
           onComplete:
             - echo stop deployment
 
-      - name: {{ .Values.K8sSteps.promoteHelm.name }}
-        type: PromoteBuild
-        configuration:
-          targetRepository: {{ .Values.K8s.chart.repoPromotion1 }}
-          includeDependencies: {{ .Values.K8sSteps.promoteHelm.includeDependencies }}
-          status: {{ .Values.K8sSteps.promoteHelm.status }}
-          comment: {{ .Values.K8sSteps.promoteHelm.comment }}
-          copy: {{ .Values.K8sSteps.promoteHelm.copy }}
-          inputResources:
-            - name: {{ .Values.K8sResources.buildInfo.resourceName }}
-              trigger: true
-          inputSteps:
-            - name: {{ .Values.K8sSteps.testApp.name }}
-          outputResources:
-            - name: {{ .Values.K8sResources.buildInfoPromoted.resourceName }}
+      # - name: {{ .Values.K8sSteps.promoteHelm.name }}
+      #   type: PromoteBuild
+      #   configuration:
+      #     targetRepository: {{ .Values.K8s.chart.repoPromotion1 }}
+      #     includeDependencies: {{ .Values.K8sSteps.promoteHelm.includeDependencies }}
+      #     status: {{ .Values.K8sSteps.promoteHelm.status }}
+      #     comment: {{ .Values.K8sSteps.promoteHelm.comment }}
+      #     copy: {{ .Values.K8sSteps.promoteHelm.copy }}
+      #     inputResources:
+      #       - name: {{ .Values.K8sResources.buildInfo.resourceName }}
+      #         trigger: true
+      #     inputSteps:
+      #       - name: {{ .Values.K8sSteps.testApp.name }}
+      #     outputResources:
+      #       - name: {{ .Values.K8sResources.buildInfoPromoted.resourceName }}
