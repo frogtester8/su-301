@@ -115,11 +115,11 @@ pipelines:
           targetRepository: urs-docker-dev-local
           autoPublishBuildInfo: true
           inputSteps:
-            - name: backapp_mvn_docker
+            - name: lab2_backapp_mvn_docker
           integrations:
             - name: artifactory_eu
           outputResources:
-            - name: bi_backapp_mvn_docker
+            - name: lab2_bi_backapp_mvn_docker
         execution:
           onSuccess:
             - >-
