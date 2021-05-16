@@ -38,7 +38,7 @@ resources:
   - name: {{ .Values.K8sResources.incomingWebhook.resourceName }}
     type: IncomingWebhook
     configuration:
-      webhookName: {{ .Values.K8sResources.incomingWebhook.resourceName }}
+      webhookName: {{ .Values.K8sResources.incomingWebhook.integrationName }}
 
 pipelines:
   - name: {{ .Values.K8s.pipelineNameCreate }}
