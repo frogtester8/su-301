@@ -2,17 +2,6 @@ template: true
 valuesFilePath: values.yml  
 
 resources:
-  # - name: {{ .Values.K8sResources.gitRepo.name }}
-  #   type: GitRepo
-  #   configuration:
-  #     gitProvider: {{ .Values.K8sResources.gitRepo.gitProvider }}
-  #     path: {{ .Values.K8sResources.gitRepo.path }}
-  #     branches:
-  #       include: {{ .Values.K8sResources.gitRepo.branches.include }}
-  #     files: 
-  #       include: {{ .Values.K8sResources.gitRepo.files.include }}
-  #     buildOn:
-  #        commit: false
 
   - name: {{ .Values.K8sResources.gitRepoHelm.name }}
     type: GitRepo
