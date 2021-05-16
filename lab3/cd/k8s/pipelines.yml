@@ -35,6 +35,11 @@ resources:
       chart: {{ .Values.K8s.chart.name }}
       version: {{ .Values.K8s.chart.version }}
 
+  - name: {{ .Values.K8sResources.incomingWebhook.resourceName }}
+    type: IncomingWebhook
+    configuration:
+      webhookName: {{ .Values.K8sResources.incomingWebhook.resourceName }}
+
 pipelines:
   - name: {{ .Values.K8s.pipelineNameCreate }}
     steps:      
@@ -49,6 +54,7 @@ pipelines:
           autoPublishBuildInfo: {{ .Values.K8sSteps.publishHelm.autoPublishBuildInfo }}
           inputResources:
             - name: {{ .Values.K8sResources.gitRepoHelm.name }}
+            - name: {{ .Values.K8sResources.incomingWebhook.resourceName }}
           integrations:
             - name: {{ .Values.K8s.integration.artifactory }}
           outputResources:
