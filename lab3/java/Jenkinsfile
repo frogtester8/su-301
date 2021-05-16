@@ -41,7 +41,7 @@ pipeline {
         string(name: 'JPD_URL', defaultValue: 'swampup301.jfrog.io', description: '')
         string(name: 'MVN_REPO', defaultValue: 'urs-mvn', description: '')
         string(name: 'DOCKER_REPO', defaultValue: 'urs-docker', description: '')
-        string(name: 'WEBHOOK_PASS', defaultValue: 'Chaysinh!21', description: '')
+        string(name: 'WEBHOOK_PASS', defaultValue: 'yourpass', description: '')
         string(name: 'WEBHOOK_URL', defaultValue: 'https://swampup301-pipelines-api.jfrog.io/v1/projectIntegrations/57/hook', description: '')
         booleanParam(name: 'FAIL_BUILD', defaultValue: false, description: 'Xray scan')
     }
