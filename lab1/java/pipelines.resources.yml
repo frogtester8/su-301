@@ -1,64 +1,25 @@
 resources:
-  - name: src_code_backapp_mvn
+  - name: lab1_src_code_backapp_mvn
     type: GitRepo
     configuration:
       gitProvider: my_github
       path: cyan21/su301
       branches:
-        include: lab2_ok
+        include: main
       files:
       #   include: ^complete\/.+
-        exclude: ci\/jfrog\/.+
+        include: lab1\/java\/.+
 
-  - name: bi_backapp_mvn
+  - name: lab1_bi_backapp_mvn
     type: BuildInfo
     configuration:
       sourceArtifactory: artifactory_eu
-      buildName: backapp_mvn
+      buildName: lab1_backapp_mvn
       buildNumber: ${run_number}
     
-  - name: bi_backapp_mvn_promoted_staging
+  - name: lab1_bi_backapp_mvn_promoted
     type: BuildInfo
     configuration:
       sourceArtifactory: artifactory_eu
       buildName: backapp_mvn
-      buildNumber: ${run_number}
-
-  - name: pb_backapp_mvn
-    type: PropertyBag
-    configuration:
-      appVersion: X.X.X
-
-  - name: src_dockerfile_backapp_mvn
-    type: GitRepo
-    configuration:
-      gitProvider: my_github
-      path: cyan21/su301
-      branches:
-        include: lab2_ok
-      files:
-        include: ci/docker\/.+
-
-  - name: fs_backapp_mvn
-    type: FileSpec
-    configuration:
-      sourceArtifactory: artifactory_eu
-#      pattern: "urs-mvn/**/multi-module-application-1.4.1.jar"
-      pattern: "urs-mvn/**/multi-module-application-${runVarAppVersion}.jar"
-      # aql: 'items.find({"repo":"urs-mvn","name": "multi-module-application-1.4.1.jar"})'
-      # aql: '"items.find": {"repo":"urs-mvn","name": "multi-module-application-1.4.1.jar"}"'
-      flat: true
-      
-  - name: bi_backapp_mvn_docker
-    type: BuildInfo
-    configuration:
-      sourceArtifactory: artifactory_eu
-      buildName: backapp_mvn_docker
-      buildNumber: ${run_number}
-
-  - name: bi_backapp_mvn_docker_promoted
-    type: BuildInfo
-    configuration:
-      sourceArtifactory: artifactory_eu
-      buildName: backapp_mvn_docker
       buildNumber: ${run_number}
