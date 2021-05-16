@@ -140,7 +140,7 @@ pipeline {
                         serverId: env.ART_ID,
                         image: "${params.JPD_URL}/${params.DOCKER_REPO}/jenkins-javapp:1.0.0",
                         targetRepo: 'urs-docker-dev-local',
-                        properties: 'project-name=docker1;status=stable',
+                        properties: 'project-name=uranus;status=stable',
                         // If the build name and build number are not set here, the current job name and number will be used:
                         buildName: 'jenkins-docker',
                         buildNumber: env.BUILD_NUMBER

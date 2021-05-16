@@ -36,7 +36,7 @@ resources:
       version: {{ .Values.K8s.chart.version }}
 
 pipelines:
-  - name: {{ .Values.K8s.pipelineName }}
+  - name: {{ .Values.K8s.pipelineNameCreate }}
     steps:      
       - name: {{ .Values.K8sSteps.publishHelm.name }}
         type: HelmPublish
@@ -55,6 +55,8 @@ pipelines:
             - name: {{ .Values.K8sResources.chart.name }}
             - name: {{ .Values.K8sResources.buildInfo.resourceName }}
 
+  - name: {{ .Values.K8s.pipelineName }}
+    steps:  
       - name: {{ .Values.K8sSteps.deployHelm.name }}
         type: HelmDeploy
         configuration:

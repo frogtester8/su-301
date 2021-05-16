@@ -1,4 +1,5 @@
 K8s:
+  pipelineNameCreate: lab3_k8s_create_helm_chart
   pipelineName: lab3_k8s_deployment
   chart: 
     repo: urs-helm
@@ -18,7 +19,7 @@ K8sResources:
     branches:
       include: main
     files:
-      include: lab3\/cd\/k8s/.*\.yml
+      include: lab3/cd/k8s/.*.yml
   chart:
     name: lab3_hc
   buildInfo:
