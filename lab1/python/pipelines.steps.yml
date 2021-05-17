@@ -35,9 +35,7 @@ pipelines:
             - jfrog --version 
             - cd ${res_lab1_src_code_webapp_python_resourcePath}/lab1/python && ls -l
             - git branch
-            - >-
-              jfrog config add --url=${int_artifactory_eu_url} --user="${int_artifactory_eu_user}" --apikey=${int_artifactory_eu_apikey} --interactive=false  art1
-              jfrog config show
+            - jfrog config add --url=${int_artifactory_eu_url} --user="${int_artifactory_eu_user}" --apikey=${int_artifactory_eu_apikey} --interactive=false  art1 && jfrog config show
             - jfrog rt pip-config --repo-resolve ${pythonRepo} --server-id-resolve art1
           onExecute:
             - jfrog rt pip-install --build-name ${res_lab1_bi_webapp_python_buildName} --build-number ${run_number} --server-id-resolve art1 --module=python_deps
