@@ -107,8 +107,8 @@ pipelines:
           dockerFileLocation: lab2/python/
           dockerImageName: ${dockerRepo}/webapp-python-docker
           dockerImageTag: ${runVarAppVersion}
-          inputSteps:
-            - name: lab2_export_variables
+          # inputSteps:
+          #   - name: lab2_export_variables
           inputResources:
             - name: lab2_src_dockerfile_webapp_python
             - name: lab2_fs_webapp_python
