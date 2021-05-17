@@ -42,6 +42,21 @@ localRepositories:
     repoLayout: simple-default 
     xray:   
       enabled: false
+  urs-generic-dev-local:
+    type: generic
+    repoLayout: simple-default 
+    xray:   
+      enabled: false
+  urs-generic-release-local:
+    type: generic
+    repoLayout: simple-default 
+    xray:   
+      enabled: false
+  urs-python-dev-local:
+    type: pypi
+    repoLayout: simple-default 
+    xray:   
+      enabled: true
 remoteRepositories: 
   urs-jcenter-remote:
     type: maven
@@ -55,6 +70,12 @@ remoteRepositories:
     dockerApiVersion: V2
     repoLayout: simple-default 
     enableTokenAuthentication: true
+    xray:   
+      enabled: true
+  urs-pypi-remote:
+    type: pypi 
+    url: https://files.pythonhosted.org 
+    repoLayout: simple-default 
     xray:   
       enabled: true
 virtualRepositories: 
@@ -84,3 +105,17 @@ virtualRepositories:
       - urs-helm-dev-local
       - urs-helm-release-local
     defaultDeploymentRepo: urs-helm-dev-local
+  urs-generic:
+    type: generic
+    repoLayout: simple-default 
+    repositories:   
+      - urs-generic-dev-local
+      - urs-generic-release-local
+    defaultDeploymentRepo: urs-generic-dev-local
+  urs-python:
+    type: pypi
+    repoLayout: simple-default 
+    repositories:   
+      - urs-python-dev-local
+      - urs-pypi-remote
+    defaultDeploymentRepo: urs-python-dev-local
