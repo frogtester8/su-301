@@ -79,7 +79,7 @@ pipeline {
                         excludeEnvPatterns: ['*private*', 'internal-*', 'ADM*'],
      
                         buildName: 'jenkins-maven',
-                        // buildNumber: '20'
+                        buildNumber: env.BUILD_NUMBER
                     )
                                         
                     rtMavenRun (
@@ -109,7 +109,7 @@ pipeline {
                     rtBuildInfo (
                         captureEnv: true,
                         excludeEnvPatterns: ['*private*', 'internal-*', 'ADM*'],
-                        buildName: 'jenkins-maven',
+                        buildName: 'jenkins-mvn-docker',
                         buildNumber: env.BUILD_NUMBER
                     )
                     
@@ -126,7 +126,7 @@ pipeline {
                               ]
                         }''',
                         module: 'webapp',
-                        buildName: 'jenkins-docker',
+                        buildName: 'jenkins-mvn-docker',
                         buildNumber: env.BUILD_NUMBER
                     )
                     
@@ -145,13 +145,13 @@ pipeline {
                         targetRepo: 'urs-docker-dev-local',
                         properties: 'project-name=uranus;status=stable',
                         // If the build name and build number are not set here, the current job name and number will be used:
-                        buildName: 'jenkins-docker',
+                        buildName: 'jenkins-mvn-docker',
                         buildNumber: env.BUILD_NUMBER
                     )
  
                     rtPublishBuildInfo (
                         serverId: env.ART_ID,
-                        buildName: 'jenkins-docker',
+                        buildName: 'jenkins-mvn-docker',
                         buildNumber: env.BUILD_NUMBER
                     )
                 }

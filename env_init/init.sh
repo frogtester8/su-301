@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-JPD_URL=https://swampup301.jfrog.io
+#JPD_URL=https://swampup301.jfrog.io
 BUILD_NAMES=backapp_mvn
 
 if [ -z "$JPD_URL" ]
