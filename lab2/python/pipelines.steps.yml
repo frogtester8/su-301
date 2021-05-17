@@ -86,15 +86,15 @@ pipelines:
           dockerRepo: swampup301.jfrog.io/urs-docker
 
     steps:
-      # # need this step to export the appVersion for the Filespec Resource
-      # - name: lab2_export_variables
-      #   type: Bash
-      #   configuration:
-      #     inputResources:
-      #       - name: lab2_pb_webapp_python
-      #   execution:
-      #     onExecute:
-      #       - add_run_variables runVarAppVersion=${res_lab2_pb_webapp_python_appVersion}
+      # need this step to export the appVersion for the Filespec Resource
+      - name: lab2_export_variables
+        type: Bash
+        configuration:
+          inputResources:
+            - name: lab2_pb_webapp_python
+        execution:
+          onExecute:
+            - add_run_variables runVarAppVersion=${res_lab2_pb_webapp_python_appVersion}
 
       - name: lab2_build_webapp_python_docker
         type: DockerBuild
@@ -107,8 +107,8 @@ pipelines:
           dockerFileLocation: lab2/python/
           dockerImageName: ${dockerRepo}/webapp-python-docker
           dockerImageTag: ${runVarAppVersion}
-          # inputSteps:
-          #   - name: lab2_export_variables
+            inputSteps:
+              - name: lab2_export_variables
           inputResources:
             - name: lab2_src_dockerfile_webapp_python
             - name: lab2_fs_webapp_python
