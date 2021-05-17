@@ -3,7 +3,7 @@ pipelines:
     configuration:
       environmentVariables:
         readOnly:
-          dockerRepo: swampup301.jfrog.io/urs-python
+          dockerRepo: swampup301.jfrog.io/urs-docker
           pythonRepo: urs-python
           genericRepo: urs-generic
           genericPromotionRepo: urs-generic-release-local
