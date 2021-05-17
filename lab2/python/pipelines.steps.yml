@@ -74,6 +74,7 @@ pipelines:
             - name: lab2_bi_webapp_python
           outputResources:
             - name: lab2_bi_webapp_python_promoted
+            - name: lab2_pb_webapp_python
         execution:  
           onSuccess:
             - write_output lab2_pb_webapp_python appVersion=${runVarAppVersion}
