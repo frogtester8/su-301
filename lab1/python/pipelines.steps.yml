@@ -32,7 +32,7 @@ pipelines:
             - name: artifactory_eu
         execution:
           onStart:
-            - apt update && apt install curl -y
+            - apt update && apt install curl git -y
             - >- 
               curl -fL https://getcli.jfrog.io | sh 
               mv ./jfrog /usr/local/bin/ 
