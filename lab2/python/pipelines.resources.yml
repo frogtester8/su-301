@@ -36,7 +36,7 @@ resources:
       branches:
         include: main
       files:
-        include: lab2/python/.+
+        include: lab2/python/Dockerfile
 
   - name: lab2_fs_webapp_python
     type: FileSpec
