@@ -20,7 +20,7 @@ pipelines:
             image:
               custom:
                 registry: artifactory_eu
-                name: ${dockerRepo}/python
+                name: ${dockerRepo}/python-jfrog
                 tag: 3.9.5-slim-buster
                 ## remove the longest string matching "*/" starting from the left
                 sourceRepository: ${dockerRepo##*/}
