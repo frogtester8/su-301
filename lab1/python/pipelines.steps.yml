@@ -4,6 +4,7 @@ pipelines:
       environmentVariables:
         readOnly:
           dockerRepo: swampup301.jfrog.io/urs-python
+          pythonRepo: urs-python
           genericRepo: urs-generic
           genericPromotionRepo: urs-generic-release-local
     steps:
@@ -41,7 +42,7 @@ pipelines:
             - >-
               jfrog config add --url=${int_artifactory_eu_url} --user="${int_artifactory_eu_user}" --apikey=${int_artifactory_eu_apikey} --interactive=false  art1
               jfrog config show
-            - jfrog rt pip-config --repo-resolve ${dockerRepo##*/} --server-id-resolve art1
+            - jfrog rt pip-config --repo-resolve ${pythonRepo} --server-id-resolve art1
           onExecute:
             - jfrog rt pip-install --build-name ${res_lab1_bi_webapp_python_buildName} --build-number ${run_number} --server-id-resolve art1 --module=python_deps
             - tar -czvf webapp_python.tar.gz ../../src/python
