@@ -51,7 +51,6 @@
             "name": "global_security",
             "type": "security"
         }
-    ]
-   }, 
+    ],
     "watch_recipients":["yannc@jfrog.com"]
 }
