@@ -25,7 +25,7 @@ pipelines:
                 ## remove the longest string matching "*/" starting from the left
                 sourceRepository: ${dockerRepo##*/}
           inputResources:
-            - name: lab10_src_code_webapp_python
+            - name: lab1_src_code_webapp_python
           outputResources:
             - name: lab1_bi_webapp_python
           integrations:
