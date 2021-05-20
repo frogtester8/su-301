@@ -1,17 +1,25 @@
 pipelines:
-  - name: vm_deployment
-
+  - name: test_deployment
     steps:
-      - name: deploy_to_vm
-        type: Bash
+      - name: deploy_webapp
+        type: deployment/Webapp
         configuration:
+          dryRun: true
+          container: 
+            repo: swampup301.jfrog.io/awesome-app
+            tag: 1.3.0
+          # webApp: 
+          #   path: myrepo/awesome-app.3.0.0.jar
+          #   technology: wildfly
+          ansible:
+            role: wildfly
+            inventory: uat
           inputResources:
-            - name: vm_group
-            - name: wh_jenkins
+            # - name: my_cron
+            - name: vm_group1
+            - name: wh_jenkins1
+          integrations:
+            - name: artifactory_eu
         execution:
           onStart:
-            - echo onStart
-            - echo "$res_wh_jenkins_payload" | jq '.' > payload.json
-            - cat payload.json
-          onExecute:
-            - ssh -i ~/.ssh/vm_group ec2-user@${res_vm_group_targets_0} "uname -a &&./test.sh"
+            - jfrog rt c show && jfrog --version
