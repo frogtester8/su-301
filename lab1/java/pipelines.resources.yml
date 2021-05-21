@@ -20,5 +20,5 @@ resources:
     type: BuildInfo
     configuration:
       sourceArtifactory: artifactory_eu
-      buildName: {{ gitBranch }}_backapp_mvn
+      buildName: {{ gitBranch }}_lab1_backapp_mvn
       buildNumber: ${run_number}
