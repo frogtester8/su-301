@@ -5,7 +5,7 @@ resources:
       gitProvider: my_github
       path: cyan21/su301
       branches:
-        include: main
+        include: {{ gitBranch }}
       files:
         include: lab1/java/.+
 
