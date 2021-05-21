@@ -5,7 +5,7 @@ resources:
       gitProvider: my_github
       path: cyan21/su301
       branches:
-        include: main
+        include: {{ gitbranch }}
       files:
         include: lab1/java/.+
 
@@ -19,6 +19,6 @@ resources:
   - name: lab1_bi_backapp_mvn_promoted
     type: BuildInfo
     configuration:
-      sourceArtifactory: artifactory_brexit
+      sourceArtifactory: artifactory_eu
       buildName: backapp_mvn
       buildNumber: ${run_number}

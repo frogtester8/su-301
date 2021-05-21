@@ -3,7 +3,7 @@ pipelines:
     configuration:
       environmentVariables:
         readOnly:
-          virtualRepo: urs-mvn
+          virtualRepo: ${virtualRepo}
     steps:
       - name: lab1_build_backapp_mvn
         type: MvnBuild
@@ -13,19 +13,19 @@ pipelines:
             JFROG_CLI_LOG_LEVEL: DEBUG
           mvnCommand: clean package
           sourceLocation: src/java
-          resolverSnapshotRepo: urs-mvn
-          resolverReleaseRepo: urs-mvn
-          deployerSnapshotRepo: urs-mvn
-          deployerReleaseRepo: urs-mvn
+          resolverSnapshotRepo: ${virtualRepo}
+          resolverReleaseRepo: ${virtualRepo}
+          deployerSnapshotRepo: ${virtualRepo}
+          deployerReleaseRepo: ${virtualRepo}
           forceXrayScan: false
           autoPublishBuildInfo: true
           inputResources:
-            - name: lab10_src_code_backapp_mvn
+            - name: lab1_src_code_backapp_mvn
           outputResources:
             - name: lab1_bi_backapp_mvn
           integrations:
             - name: artifactory_eu
-          execution:
+        execution:
           onStart:
             - ls -l ${res_lab1_src_code_backapp_mvn_resourcePath}/src
             - jfrog rt c show
@@ -39,13 +39,13 @@ pipelines:
         configuration:
           failOnScan: false
           inputResources:
-            - name: lab1_bi_backapp_maven
+            - name: lab1_bi_backapp_mvn
               trigger: true
 
       - name: lab1_promote_bi_backapp_mvn
         type: PromoteBuild
         configuration:
-          targetRepository: urs-mvn-rc-local
+          targetRepository: ${virtualRepo}-rc-local
           includeDependencies: false
           status: SANDBOX_OK
           comment: Unit testing and Xray scan passed succesfully
